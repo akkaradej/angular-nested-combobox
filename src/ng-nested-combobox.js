@@ -1,16 +1,14 @@
+'use strict';
+
 angular.module('ui.nested.combobox', [])
-    .constant('nestedComboboxConfig', {
-        templatePrefix: '',
-      })
     .controller('NestedComboboxController', [
-            '$scope', '$element', '$attrs', 'nestedComboboxConfig', 
-            function ($scope, $element, $attrs, nestedComboboxConfig) {
-        'use strict';
+            '$scope', '$element', '$attrs', 
+            function ($scope, $element, $attrs) {
+
         var that = this,
             oldMemberId = null;
         this.isOpen = false;
         this.currentMember = $scope.currentMember;
-        this.templatePrefix = nestedComboboxConfig.templatePrefix;
 
         $scope.$watch('controlDisabled', function (value) {
             that.controlDisabled = value;
@@ -50,15 +48,13 @@ angular.module('ui.nested.combobox', [])
 
         };
     }])
-    .directive('nestedComboBox', ['nestedComboboxConfig', function (nestedComboboxConfig) {
-        'use strict';
-
+    .directive('nestedComboBox', function () {
         return {
             restrict: 'E',
             controller: 'NestedComboboxController',
             controllerAs: 'gs',
             replace: true,
-            templateUrl: nestedComboboxConfig.templatePrefix+'template/select-group.html',
+            templateUrl: 'template/select-group.html',
             scope: {
                 collection: '=',
                 currentMember: '=',
@@ -67,4 +63,24 @@ angular.module('ui.nested.combobox', [])
                 changeEvent: '='
             }
         };
+    })
+    .run(['$templateCache', function($templateCache) {
+        $templateCache.put('template/select-group.html',
+        '<div class="custom-select"   data-ng-disabled="gs.controlDisabled==\'true\'" data-ng-class="controlClass" data-ng-click="gs.toggleOpen()">'+
+            '<p>{{gs.currentMember.name}}</p>'+
+            '<span><i class="icon-sort-down"></i></span>'+
+            '<div class="list" data-ng-show="gs.isOpen">'+
+                '<ul>'+
+                    '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" data-ng-include="\'template/sub-level.html\'" data-ng-repeat="member in collection"> </li>'+
+                '</ul>'+
+            '</div>'+
+        '</div>'
+        );
+
+        $templateCache.put('template/sub-level.html',
+        '<a href="" data-ng-click="gs.selectValue(e,member)"><span>{{member.name}}</span></a>'+
+        '<ul>'+
+            '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" ng-repeat="member in member.childrens" ng-include="\'template/sub-level.html\'"></li>'+
+        '</ul>'
+        );
     }]);
