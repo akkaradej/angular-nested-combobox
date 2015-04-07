@@ -19,16 +19,16 @@ data have parents and children structure. Depth is determined by data.
 <script src="src/ng-nested-combobox.js"></script>
 ```
 
-2. Add tree combo-box directive container directive: 
+2. Add nested-combo-box directive container directive: 
 ```html
-<select-tree-combo-box control-class="col-md-7" change-event="changeItem"  collection="collection" current-member="filter.service" />
+<nested-combo-box control-class="col-md-7" change-event="changeItem"  collection="collection" current-member="filter.service" />
 ```
 
 3. Prepare input data and output event function :
 
 ```js
 	
-	angular.module('main', ['ng.tree.combobox'])
+	angular.module('main', ['ui.nested.combobox'])
 	.controller('myController', function($scope) {
 	    $scope.collection=[
 	       {
