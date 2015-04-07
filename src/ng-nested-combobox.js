@@ -1,14 +1,16 @@
-/**
- * Created by Maciek on 2014-06-29.
- */
-
 angular.module('ui.nested.combobox', [])
-    .controller('NestedComboboxController', ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+    .constant('nestedComboboxConfig', {
+        templatePrefix: '',
+      })
+    .controller('NestedComboboxController', [
+            '$scope', '$element', '$attrs', 'nestedComboboxConfig', 
+            function ($scope, $element, $attrs, nestedComboboxConfig) {
         'use strict';
         var that = this,
             oldMemberId = null;
         this.isOpen = false;
         this.currentMember = $scope.currentMember;
+        this.templatePrefix = nestedComboboxConfig.templatePrefix;
 
         $scope.$watch('controlDisabled', function (value) {
             that.controlDisabled = value;
@@ -48,7 +50,7 @@ angular.module('ui.nested.combobox', [])
 
         };
     }])
-    .directive('nestedComboBox', function () {
+    .directive('nestedComboBox', ['nestedComboboxConfig', function (nestedComboboxConfig) {
         'use strict';
 
         return {
@@ -56,7 +58,7 @@ angular.module('ui.nested.combobox', [])
             controller: 'NestedComboboxController',
             controllerAs: 'gs',
             replace: true,
-            templateUrl: 'template/select-group.html',
+            templateUrl: nestedComboboxConfig.templatePrefix+'template/select-group.html',
             scope: {
                 collection: '=',
                 currentMember: '=',
@@ -65,4 +67,4 @@ angular.module('ui.nested.combobox', [])
                 changeEvent: '='
             }
         };
-    });
+    }]);
