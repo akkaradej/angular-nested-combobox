@@ -84,8 +84,9 @@ data have parents and children structure. Depth is determined by data.
 2. `change-event` - function name in your controller where receive selected data from control
 3. `collection` - input data collection
 4. `current-member` - selected data
+5. `filter-by` - filter in ng-repeat
 
-## Author
+## Original Author
 **Maciej Jaskula**
 
 ## Copyright

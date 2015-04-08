@@ -9,19 +9,11 @@ angular.module('ui.nested.combobox', [])
             oldMemberId = null;
         this.isOpen = false;
         this.currentMember = $scope.currentMember;
+        this.filterBy = $scope.filterBy || {};
 
         $scope.$watch('controlDisabled', function (value) {
             that.controlDisabled = value;
         });
-
-        /* $element.on('blur', function (e) {
-         //that.isOpen.status = !that.isOpen.status;
-         that.isOpen = false;
-         });
-         $element.on('focus', function (e) {
-         //that.isOpen.status = !that.isOpen.status;
-         that.isOpen = true;
-         });*/
 
         this.toggleOpen = function () {
 
@@ -41,7 +33,7 @@ angular.module('ui.nested.combobox', [])
             if (member.id === 'root') {
                 member.name = event.currentTarget.innerText;
             }
-            //that.currentMember = member;
+            // that.currentMember = member;
             $scope.changeEvent(member);
             that.currentMember = member;
             oldMemberId = member.id;
@@ -60,7 +52,8 @@ angular.module('ui.nested.combobox', [])
                 currentMember: '=',
                 controlClass: '@',
                 controlDisabled: '@',
-                changeEvent: '='
+                changeEvent: '=',
+                filterBy: '='
             }
         };
     })
@@ -71,7 +64,7 @@ angular.module('ui.nested.combobox', [])
             '<span><i class="icon-sort-down"></i></span>'+
             '<div class="list" data-ng-show="gs.isOpen">'+
                 '<ul>'+
-                    '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" data-ng-include="\'template/sub-level.html\'" data-ng-repeat="member in collection"> </li>'+
+                    '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" data-ng-include="\'template/sub-level.html\'" data-ng-repeat="member in collection | filter: gs.filterBy"> </li>'+
                 '</ul>'+
             '</div>'+
         '</div>'
@@ -80,7 +73,7 @@ angular.module('ui.nested.combobox', [])
         $templateCache.put('template/sub-level.html',
         '<a href="" data-ng-click="gs.selectValue(e,member)"><span>{{member.name}}</span></a>'+
         '<ul>'+
-            '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" ng-repeat="member in member.childrens" ng-include="\'template/sub-level.html\'"></li>'+
+            '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" ng-repeat="member in member.childrens | filter: gs.filterBy" ng-include="\'template/sub-level.html\'"></li>'+
         '</ul>'
         );
     }]);
