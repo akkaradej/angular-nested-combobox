@@ -35,7 +35,7 @@ angular.module('ui.nested.combobox', [])
             }
             // that.currentMember = member;
             $scope.changeEvent(member);
-            that.currentMember = member;
+            $scope.currentMember = that.currentMember = member;
             oldMemberId = member.id;
 
         };
