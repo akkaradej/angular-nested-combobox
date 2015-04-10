@@ -33,11 +33,9 @@ angular.module('ui.nested.combobox', [])
             if (member.id === 'root') {
                 member.name = event.currentTarget.innerText;
             }
-            // that.currentMember = member;
             $scope.changeEvent(member);
             $scope.currentMember = that.currentMember = member;
             oldMemberId = member.id;
-
         };
     }])
     .directive('nestedComboBox', function () {
@@ -71,7 +69,10 @@ angular.module('ui.nested.combobox', [])
         );
 
         $templateCache.put('template/sub-level.html',
-        '<a href="" data-ng-click="gs.selectValue(e,member)"><span>{{member.name}}</span></a>'+
+        '<div class="sub">'+
+            '<div class="overlay"></div>'+
+            '<a data-ng-click="gs.selectValue(e,member)"><span>{{member.name}}</span></a>'+
+        '</div>'+
         '<ul>'+
             '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" ng-repeat="member in member.childrens | filter: gs.filterBy" ng-include="\'template/sub-level.html\'"></li>'+
         '</ul>'
