@@ -16,12 +16,25 @@ angular.module('ui.nested.combobox', [])
             that.controlDisabled = value;
         });
 
+        $(document).bind('click', function(event){
+            if(that.isOpen){
+                var isClickedThisElement = $element.find(event.target).length > 0;
+                if(isClickedThisElement){
+                    return;
+                }
+                $scope.$apply(function(){
+                    that.isOpen = false;
+                });
+            }
+        });
+
         this.toggleOpen = function () {
 
             if (that.controlDisabled === 'true') {
                 this.isOpen.status = false;
                 return false;
             }
+
             this.isOpen = !this.isOpen;
         };
 
@@ -30,7 +43,7 @@ angular.module('ui.nested.combobox', [])
             if (oldMemberId === member.id) {
                 return true;
             }
-            
+
             $scope.changeEvent(member);
             $scope.currentMember = that.currentMember = member;
             oldMemberId = member.id;
