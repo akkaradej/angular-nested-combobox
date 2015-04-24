@@ -5,56 +5,63 @@ angular.module('ui.nested.combobox', [])
             '$scope', '$element', '$attrs', 
             function ($scope, $element, $attrs) {
 
-        var that = this,
-            oldMemberId = null;
-        this.isOpen = false;
-        this.currentMember = $scope.currentMember;
-        this.filterBy = $scope.filterBy || {};
-        this.placeholder = $scope.placeholder;
+        var vm = this;
+        var oldMemberId = null;
 
-        $scope.$watch('controlDisabled', function (value) {
-            that.controlDisabled = value;
-        });
+        vm.isOpen = false;
+        vm.currentMember = $scope.currentMember;
+        vm.filterBy = $scope.filterBy || {};
+        vm.placeholder = $scope.placeholder;
+        vm.toggleOpen = toggleOpen;
+        vm.selectValue = selectValue;
 
-        $(document).bind('click', function(event){
-            if(that.isOpen){
-                var isClickedThisElement = $element.find(event.target).length > 0;
-                if(isClickedThisElement){
-                    return;
+        _trackControlDisabled();
+        _setOnClickOutside();
+
+        function _trackControlDisabled(){
+            $scope.$watch('controlDisabled', function (value) {
+                vm.controlDisabled = value;
+            });
+        }
+
+        function _setOnClickOutside(){
+            $(document).bind('click', function(event){
+                if(vm.isOpen){
+                    var isClickedvmElement = $element.find(event.target).length > 0;
+                    if(isClickedvmElement){
+                        return;
+                    }
+                    $scope.$apply(function(){
+                        vm.isOpen = false;
+                    });
                 }
-                $scope.$apply(function(){
-                    that.isOpen = false;
-                });
-            }
-        });
+            });
+        }
 
-        this.toggleOpen = function () {
-
-            if (that.controlDisabled === 'true') {
-                this.isOpen.status = false;
+        function toggleOpen() {
+            if(vm.controlDisabled === 'true') {
+                vm.isOpen.status = false;
                 return false;
             }
-
-            this.isOpen = !this.isOpen;
+            vm.isOpen = !vm.isOpen;
         };
 
-        this.selectValue = function (event, member) {
-
+        function selectValue(event, member) {
             if (oldMemberId === member.id) {
                 return true;
             }
-
             $scope.changeEvent(member);
-            $scope.currentMember = that.currentMember = member;
+            $scope.currentMember = vm.currentMember = member;
             oldMemberId = member.id;
         };
 
     }])
+
     .directive('nestedComboBox', function () {
         return {
             restrict: 'E',
             controller: 'NestedComboboxController',
-            controllerAs: 'gs',
+            controllerAs: 'vm',
             replace: true,
             templateUrl: 'template/select-group.html',
             scope: {
@@ -68,20 +75,21 @@ angular.module('ui.nested.combobox', [])
             }
         };
     })
+
     .run(['$templateCache', function($templateCache) {
         $templateCache.put('template/select-group.html',
-        '<div class="custom-select"   data-ng-disabled="gs.controlDisabled==\'true\'" data-ng-class="controlClass" data-ng-click="gs.toggleOpen()">'+
-            '<p>{{gs.currentMember.name || gs.placeholder}}</p>'+
+        '<div class="custom-select"   data-ng-disabled="vm.controlDisabled==\'true\'" data-ng-class="controlClass" data-ng-click="vm.toggleOpen()">'+
+            '<p>{{vm.currentMember.name || vm.placeholder}}</p>'+
             '<span><i class="icon-sort-down"></i></span>'+
-            '<div class="list" data-ng-show="gs.isOpen">'+
+            '<div class="list" data-ng-show="vm.isOpen">'+
                 '<ul>'+
-                    '<li data-ng-class="{\'active\':!gs.currentMember}" ng-init="member=\'\'" ng-if="gs.placeholder">'+
+                    '<li data-ng-class="{\'active\':!vm.currentMember}" ng-init="member=\'\'" ng-if="vm.placeholder">'+
                         '<div class="sub">'+
                             '<div class="overlay"></div>'+
-                            '<a data-ng-click="gs.selectValue(e,member)"><span>{{gs.placeholder}}</span></a>'+
+                            '<a data-ng-click="vm.selectValue(e,member)"><span>{{vm.placeholder}}</span></a>'+
                         '</div>'+
                     '</li>'+
-                    '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" data-ng-include="\'template/sub-level.html\'" data-ng-repeat="member in collection | filter: gs.filterBy"> </li>'+
+                    '<li data-ng-class="{\'active\':vm.currentMember.id === member.id}" data-ng-include="\'template/sub-level.html\'" data-ng-repeat="member in collection | filter: vm.filterBy"> </li>'+
                 '</ul>'+
             '</div>'+
         '</div>'
@@ -90,10 +98,10 @@ angular.module('ui.nested.combobox', [])
         $templateCache.put('template/sub-level.html',
         '<div class="sub">'+
             '<div class="overlay"></div>'+
-            '<a data-ng-click="gs.selectValue(e,member)"><span>{{member.name}}</span></a>'+
+            '<a data-ng-click="vm.selectValue(e,member)"><span>{{member.name}}</span></a>'+
         '</div>'+
         '<ul>'+
-            '<li data-ng-class="{\'active\':gs.currentMember.id === member.id}" ng-repeat="member in member.childrens | filter: gs.filterBy" ng-include="\'template/sub-level.html\'"></li>'+
+            '<li data-ng-class="{\'active\':vm.currentMember.id === member.id}" ng-repeat="member in member.childrens | filter: vm.filterBy" ng-include="\'template/sub-level.html\'"></li>'+
         '</ul>'
         );
     }]);
