@@ -62,7 +62,7 @@ angular.module('ui.nested.combobox', [])
             '<span><i class="icon-sort-down"></i></span>'+
             '<div class="list" data-ng-show="gs.isOpen">'+
                 '<ul>'+
-                    '<li data-ng-class="{\'active\':gs.currentMember === \'\'}" ng-init="member=\'\'" ng-if="gs.placeholder">'+
+                    '<li data-ng-class="{\'active\':!gs.currentMember}" ng-init="member=\'\'" ng-if="gs.placeholder">'+
                         '<div class="sub">'+
                             '<div class="overlay"></div>'+
                             '<a data-ng-click="gs.selectValue(e,member)"><span>{{gs.placeholder}}</span></a>'+
