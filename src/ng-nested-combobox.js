@@ -6,7 +6,7 @@ angular.module('ui.nested.combobox', [])
             function ($scope, $element, $attrs) {
 
         var vm = this;
-        var oldMemberId = null;
+        var oldMember = null;
 
         vm.isOpen = false;
         vm.currentMember = $scope.currentMember;
@@ -47,12 +47,12 @@ angular.module('ui.nested.combobox', [])
         };
 
         function selectValue(event, member) {
-            if (oldMemberId === member.id) {
+            if (oldMember == member) {
                 return true;
             }
-            $scope.changeEvent(member);
+            $scope.changeEvent(member, oldMember);
             $scope.currentMember = vm.currentMember = member;
-            oldMemberId = member.id;
+            oldMember = member;
         };
 
     }])
