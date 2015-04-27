@@ -50,7 +50,7 @@ angular.module('ui.nested.combobox', [])
             if (oldMember == member) {
                 return true;
             }
-            $scope.changeEvent(member, oldMember);
+            $scope.changeEvent(member, oldMember || vm.currentMember);
             $scope.currentMember = vm.currentMember = member;
             oldMember = member;
         };
