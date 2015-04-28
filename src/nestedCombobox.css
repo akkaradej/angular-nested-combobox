@@ -1,4 +1,5 @@
 .custom-select {
+  cursor: normal;
   position: relative;
   padding: 0 10px;
   height: 32px;
