@@ -64,11 +64,14 @@
   left: 0;
   height: 20px;
 }
-.custom-select .list ul li .sub:hover .overlay {
+.custom-select .list ul li .node:hover .overlay {
   background-color: #cccccc;
 }
-.custom-select .list ul li.active > .sub .overlay {
+.custom-select .list ul li.active > .node .overlay {
   background-color: #cccccc;
+}
+.custom-select .list ul > li.sub-level {
+  padding-left: 0;
 }
 .custom-select .icon-sort-down {
   background: url('icn.png') no-repeat 0 -12px #ffffff;

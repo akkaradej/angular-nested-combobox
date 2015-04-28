@@ -84,24 +84,30 @@ angular.module('ui.nested.combobox', [])
             '<div class="list" data-ng-show="vm.isOpen">'+
                 '<ul>'+
                     '<li data-ng-class="{\'active\':!vm.currentMember}" ng-init="member=\'\'" ng-if="vm.placeholder">'+
-                        '<div class="sub">'+
+                        '<div class="node">'+
                             '<div class="overlay"></div>'+
                             '<a data-ng-click="vm.selectValue(e,member)"><span>{{vm.placeholder}}</span></a>'+
                         '</div>'+
                     '</li>'+
-                    '<li data-ng-class="{\'active\':vm.currentMember.id === member.id}" data-ng-include="\'template/sub-level.html\'" data-ng-repeat="member in collection | filter: vm.filterBy"> </li>'+
+                    '<li class="root-level" data-ng-class="{\'active\':vm.currentMember.id === member.id}" data-ng-repeat="member in collection | filter: vm.filterBy">'+
+                        '<div class="node">'+
+                            '<div class="overlay"></div>'+
+                            '<a data-ng-click="vm.selectValue(e,member)"><span>{{member.name}}</span></a>'+
+                        '</div>'+
+                        '<ul data-ng-include="\'template/sub-level.html\'"></ul>'+
+                    '</li>'+
                 '</ul>'+
             '</div>'+
         '</div>'
         );
 
         $templateCache.put('template/sub-level.html',
-        '<div class="sub">'+
-            '<div class="overlay"></div>'+
-            '<a data-ng-click="vm.selectValue(e,member)"><span>{{member.name}}</span></a>'+
-        '</div>'+
-        '<ul>'+
-            '<li data-ng-class="{\'active\':vm.currentMember.id === member.id}" ng-repeat="member in member.childrens | filter: vm.filterBy" ng-include="\'template/sub-level.html\'"></li>'+
-        '</ul>'
+        '<li class="sub-level" data-ng-class="{\'active\':vm.currentMember.id === member.id}" ng-repeat="member in member.childrens | filter: vm.filterBy">'+
+            '<div class="node">'+
+                '<div class="overlay"></div>'+
+                '<a data-ng-click="vm.selectValue(e,member)"><span>└ {{member.name}}</span></a>'+
+            '</div>'+
+            '<div data-ng-include="\'template/sub-level.html\'"></div>'+
+        '</li>'
         );
     }]);

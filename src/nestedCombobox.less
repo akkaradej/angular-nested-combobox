@@ -35,7 +35,7 @@
     ul{list-style:none;padding:0;width:100%;margin:0;
       li{
         padding-left: 15px;
-        .sub {
+        .node {
           a{
             position: relative;
             display:block;color:@textColor;
@@ -56,15 +56,17 @@
           }
         }
         &.active{
-          > .sub {
+          > .node {
             .overlay{
               background-color:@blueColor;
             }
           }
         }
       }
+      > li.sub-level {
+        padding-left: 0;
+      }
     }
-
   }
   .icon-sort-down{background:url('icn.png') no-repeat 0 -12px #FFF;height:20px;width:10px;display:block;}
 }
